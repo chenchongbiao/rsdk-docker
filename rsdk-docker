@@ -1,0 +1,68 @@
+#!/bin/bash
+
+set -eu
+
+DOCKER_USER="rsdk"
+IMAGE_NAME="rsdk-docker"
+CONTAINER_NAME="rsdk-docker"
+EXTRA_ARGS=""
+DOCKER_RUN_OPTS=(
+    -id
+    --name "$CONTAINER_NAME"
+    --privileged
+    --user "$(id -u):$(id -g)" \
+    -e "PATH=./src/bin:$PATH"
+    -e "TERM=xterm-256color"
+    -v /etc/resolv.conf:/etc/resolv.conf:ro
+    -v /etc/localtime:/etc/localtime:ro
+    -v /dev:/dev
+    -v /sys:/sys:ro
+    -v /tmp:/tmp
+    -v "${HOME}:/home/$DOCKER_USER"
+)
+DOCKER_EXEC_OPTS=(
+    -it
+)
+
+# Pass through host proxy environment variables if present
+for _var in HTTP_PROXY HTTPS_PROXY NO_PROXY http_proxy https_proxy no_proxy; do
+  _val=$(printenv "$_var" 2>/dev/null || true)
+  if [ -n "$_val" ]; then
+    DOCKER_RUN_OPTS+=( "-e" "$_var=$_val" )
+  fi
+done
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    install)
+      SOURCE_PATH="$(realpath $0)"
+      BASE_NAME="$(basename $0)"
+      TARGET_LINK="/usr/bin/$BASE_NAME"
+
+      if [ ! -L "$TARGET_LINK" ]; then
+        sudo ln -sf "$SOURCE_PATH" "$TARGET_LINK"
+      fi
+
+      exit 0
+      ;;
+    *)
+      EXTRA_ARGS="$@"
+      break
+      ;;
+  esac
+done
+
+if [ -z "$EXTRA_ARGS" ]; then
+  EXTRA_ARGS="/bin/bash"
+fi
+
+if docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+  if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+    docker rm "${CONTAINER_NAME}"
+    docker run "${DOCKER_RUN_OPTS[@]}" "$IMAGE_NAME" $EXTRA_ARGS
+  fi
+else
+  docker run "${DOCKER_RUN_OPTS[@]}" "$IMAGE_NAME" $EXTRA_ARGS
+fi
+
+exec docker exec "${DOCKER_EXEC_OPTS[@]}" "$CONTAINER_NAME" $EXTRA_ARGS
