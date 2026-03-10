@@ -13,7 +13,6 @@ DOCKER_RUN_OPTS=(
     --user "$(id -u):$(id -g)" \
     -e "PATH=./src/bin:$PATH"
     -e "TERM=xterm-256color"
-    -v /etc/resolv.conf:/etc/resolv.conf:ro
     -v /etc/localtime:/etc/localtime:ro
     -v /dev:/dev
     -v /sys:/sys:ro
