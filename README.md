@@ -2,6 +2,17 @@
 
 rsdk-docker 是 [rsdk](https://github.com/radxaos-sdk/rsdk) 项目 Docker 环境，原项目需要配合 Devcontainer 使用，需要 nix 环境再运行 Docker，并且 nix 环境配置如果没有代理配置时间相当长，并且一些 nix 包没有 arm64 架构的支持。这里配置一个 Docker 环境来使用。
 
+# 启用 binfmt
+
+如果在 amd64 上构建请执行以下命令，在 arm64 上可以忽略。
+
+支持以运行跨架构二进制文件。
+
+```bash
+sudoapt-get update
+sudoapt-getinstallgit qemu-user-static binfmt-support
+```
+
 # 构建 Docker 镜像
 
 请先安装好 Docker 环境并将用户添加到 Docker 用户组中。
