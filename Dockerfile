@@ -2,8 +2,8 @@ FROM debian:12-slim as builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN sed -i -e 's/deb.debian.org/mirrors.aliyun.com/g' \
-    -e 's|deb.debian.org/debian-security|mirrors.aliyun.com|g' /etc/apt/sources.list.d/debian.sources|| true
+RUN sed -i -e 's/deb.debian.org/mirrors.hust.edu.cn/g' \
+    -e 's|deb.debian.org/debian-security|mirrors.hust.edu.cn|g' /etc/apt/sources.list.d/debian.sources|| true
 RUN sed -i '/bookworm-updates/s/$/ bookworm-backports/' /etc/apt/sources.list.d/debian.sources
 
 RUN apt-get update && \
@@ -17,8 +17,8 @@ FROM debian:12-slim
 
 COPY --from=builder /usr/bin/jsonnet /usr/bin/jsonnet
 
-RUN sed -i -e 's/deb.debian.org/mirrors.aliyun.com/g' \
-    -e 's|deb.debian.org/debian-security|mirrors.aliyun.com|g' /etc/apt/sources.list.d/debian.sources|| true
+RUN sed -i -e 's/deb.debian.org/https://mirrors.hust.edu.cn/g' \
+    -e 's|deb.debian.org/debian-security|https://mirrors.hust.edu.cn|g' /etc/apt/sources.list.d/debian.sources|| true
 RUN sed -i '/bookworm-updates/s/$/ bookworm-backports/' /etc/apt/sources.list.d/debian.sources
 
 RUN apt-get update && \
