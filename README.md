@@ -84,7 +84,7 @@ rsdk 文档，https://radxaos-sdk.github.io/rsdk/cmd/rsdk-build.html
 ## Dragon Q6A
 
 ```bash
-rsdk build radxa-dragon-q6a noble gnome -T --debs debs --debug -m https://mirrors.aliyun.com -M https://mirrors.hust.edu.cn/radxa-deb/
+rsdk build radxa-dragon-q6a noble gnome -T --debs debs --debug -m https://mirrors.hust.edu.cn -M https://mirrors.hust.edu.cn/radxa-deb/
 ```
 
 位置参数 radxa-dragon-q6a 为产品名，对应 rsdk/src/share/rsdk/configs/products.json 文件，product 字段。
@@ -150,5 +150,5 @@ rm -rf out/radxa-dragon-q6a_noble_gnome
 ```
 
 ```bash
-rsdk build radxa-dragon-q6a noble gnome -T --debs debs --debug -m https://mirrors.aliyun.com -M https://mirrors.hust.edu.cn/radxa-deb/ -s 4096
+rsdk build radxa-dragon-q6a noble gnome -T --debs debs --debug -m https://mirrors.hust.edu.cn -M https://mirrors.hust.edu.cn/radxa-deb/ -s 4096
 ```
