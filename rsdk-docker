@@ -13,6 +13,7 @@ DOCKER_RUN_OPTS=(
     --user "$(id -u):$(id -g)" \
     -e "PATH=./src/bin:$PATH"
     -e "TERM=xterm-256color"
+    --group-add "$(getent group kvm | cut -d: -f3)"
     -v /etc/localtime:/etc/localtime:ro
     -v /dev:/dev
     -v /sys:/sys:ro
