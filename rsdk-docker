@@ -19,8 +19,16 @@ DOCKER_RUN_OPTS=(
     -v /tmp:/tmp
     -v "${HOME}:/home/$DOCKER_USER"
 )
+HOST_PWD="$(pwd)"
+if [[ "$HOST_PWD" == "$HOME"* ]]; then
+    CONTAINER_PWD="/home/$DOCKER_USER${HOST_PWD#$HOME}"
+else
+    CONTAINER_PWD="$HOST_PWD"
+fi
+
 DOCKER_EXEC_OPTS=(
     -it
+    -w "$CONTAINER_PWD"
 )
 
 # Pass through host proxy environment variables if present
