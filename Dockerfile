@@ -1,11 +1,13 @@
-FROM debian:12-slim as builder
-
-ENV DEBIAN_FRONTEND=noninteractive
+FROM debian:12-slim as base
 ARG MIRROR="mirrors.hust.edu.cn"
 
 RUN sed -i -e "s/deb.debian.org/${MIRROR}/g" \
     -e "s|security.debian.org|${MIRROR}|g" /etc/apt/sources.list.d/debian.sources || true
 RUN sed -i '/bookworm-updates/s/$/ bookworm-backports/' /etc/apt/sources.list.d/debian.sources
+
+FROM base as builder
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
   apt-get install -y git make clang pkgconf && \
@@ -14,14 +16,9 @@ RUN apt-get update && \
   make CC=clang CXX=clang++ && \
   cp jsonnet /usr/bin
 
-FROM debian:12-slim
+FROM base
 
 COPY --from=builder /usr/bin/jsonnet /usr/bin/jsonnet
-ARG MIRROR="mirrors.hust.edu.cn"
-
-RUN sed -i -e "s/deb.debian.org/${MIRROR}/g" \
-    -e "s|security.debian.org|${MIRROR}|g" /etc/apt/sources.list.d/debian.sources || true
-RUN sed -i '/bookworm-updates/s/$/ bookworm-backports/' /etc/apt/sources.list.d/debian.sources
 
 RUN apt-get update && \
   apt-get install -y \
