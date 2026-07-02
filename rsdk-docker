@@ -65,8 +65,7 @@ fi
 
 if docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
   if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
-    docker rm "${CONTAINER_NAME}"
-    docker run "${DOCKER_RUN_OPTS[@]}" "$IMAGE_NAME" $EXTRA_ARGS
+    docker start "${CONTAINER_NAME}"
   fi
 else
   docker run "${DOCKER_RUN_OPTS[@]}" "$IMAGE_NAME" $EXTRA_ARGS
