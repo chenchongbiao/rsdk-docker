@@ -68,7 +68,7 @@ clone rsdk 源码。
 git clone --recurse-submodules https://github.com/RadxaOS-SDK/rsdk.git
 ```
 
-进入 rsdk 源码后，执行 rsdk-docker。
+执行以下命令。
 
 ```bash
 cd rsdk
