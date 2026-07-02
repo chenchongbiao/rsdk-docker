@@ -17,6 +17,7 @@ DOCKER_RUN_OPTS=(
     -v /dev:/dev
     -v /sys:/sys:ro
     -v /tmp:/tmp
+    -v /mnt:/mnt
     -v "${HOME}:/home/$DOCKER_USER"
 )
 HOST_PWD="$(pwd)"
